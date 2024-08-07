@@ -1,165 +1,96 @@
-var audio , playbtn , title , poster , artists , seekslider , seeking=false , seekto, currenttimetext , durationtimetext , playlist_status , dir , playlist , ext , agent , playlists_artists , repeat , random;
+// script.js
 
-dir = "songs/";
-playlist = ["Cartoon - On & On" , "Diviners-X-Riell-Slow" , "InfiNoise-Sunlight","Jone - Everything","Last Heroes x TwoWorldsApart - Eclipse","Lost Sky - Fearless pt.II","Xaia, Rain Man, Oly - Breakdown"]
+document.addEventListener('DOMContentLoaded', () => {
+    const audio = new Audio('songs/wongayu.mp3');
+    const playPauseBtn = document.getElementById('playpausebtn');
+    const seekSlider = document.getElementById('seekslider');
+    const currentTimeText = document.getElementById('currenttimetext');
+    const durationTimeText = document.getElementById('durationtimetext');
+    const lyricsContainer = document.getElementById('lyrics');
 
-title =["Cartoon - On & On" , "Slow" , "Sunlight","Everything","Last Heroes","Fearless","Breakdown"]
-poster=["images/1.jpg","images/2.jpg","images/3.jpg","images/4.jpg","images/5.jpg","images/6.jpg","images/7.jpg"]
-artists=["Daniel Levi", "Diviners-X-Riell","Nilka","Jone","AERYN","Chris Linton","Xaia, Rain Man, Oly"]
+    let isPlaying = false;
+    let lyrics = [
+        { time: 0, text: "Wong ayu" },
+        { time: 1, text: "Age nyedhak a" },
+        { time: 4, text: "Ing sandhingku" },
+        { time: 7, text: "Nyawang manising" },
+        { time: 10, text: "Esemu" },
+        { time: 14, text: "Gawe Lerem e rasaku" },
+        { time: 17, text: "Tentrem ing atiku" },
+        { time: 21, text: "Haywa pegat tresnamu" },
+        { time: 25, text: "Sayangku" },
+{ time: 31, text: "Wong ayu" },
+{ time: 34, text: "Tresnamu" },
+{ time: 36, text: "Kinarya tamba" },
+{ time: 39, text: "Susah jroning batinku" },
+{ time: 46, text: "Wong bagus" },
+{ time: 49, text: "Antebna roso atimu" },
+{ time: 54, text: "Tresnoku tulus" },
+{ time: 57, text: "Jroning kalbu" },
+{ time: 60, text: "__________________" },
+        // Add more lyrics with time here
+    ];
 
-playlist_index = 0;
-
-ext =".mp3"
-agent = navigator.userAgent.toLowerCase();
-if(agent.indexOf('firefox') != -1 || agent.indexOf('opera') != -1){
-    ext=".ogg";
-}
-playbtn = document.getElementById("playpausebtn");
-nextbtn = document.getElementById("nextbtn");
-prevbtn = document.getElementById("prevbtn");
-seekslider = document.getElementById("seekslider");
-currenttimetext = document.getElementById("currenttimetext");
-durationtimetext = document.getElementById("durationtimetext");
-playlist_status = document.getElementById("playlist_status");
-playlists_artists = document.getElementById("playlist_artist");
-repeat = document.getElementById("repeat");
-randomSong = document.getElementById("random");
-
-audio = new Audio();
-audio.src = dir+playlist[0]+ext;
-audio.loop = false;
-
-playlist_status.innerHTML = title[playlist_index];
-playlists_artists.innerHTML = artists[playlist_index];
-
-playbtn.addEventListener("click",playPause);
-nextbtn.addEventListener("click",nextSong);
-prevbtn.addEventListener("click",prevSong);
-seekslider.addEventListener("mousedown" , function(event){ seeking=true; seek(event);});
-seekslider.addEventListener("mousemove",function(event){ seek(event);});
-
-seekslider.addEventListener("mouseup", function(){seeking=false;});
-
-audio.addEventListener("timeupdate",function(){seektimeupdate();});
-audio.addEventListener("ended",function(){
-    switchTrack();
-});
-repeat.addEventListener("click",loop);
-randomSong.addEventListener("click",random);
-
-
-
-
-//functions
-
-function fetchMusicDetail(){
-    $("#image").attr("src",poster[playlist_index]);
-
-    playlist_status.innerHTML = title[playlist_index];
-    playlist_artist.innerHTML = artists[playlist_index];
-
-    audio.src = dir+playlist[playlist_index]+ext;
-    audio.play();
-}
-
-
-function getRandomNumber(min , max){
-    let step1 = max - min + 1;
-    let step2 = Math.random() * step1;
-    let result = Math.floor(step2) + min;
-    return result;
-}
-
-function random(){
-    let randomIndex = getRandomNumber(0 , playlist.length-1);
-    playlist_index = randomIndex;
-    fetchMusicDetail();
-    document.querySelector(".playpause").classList.add("active");
-}
-
-function loop(){
-    if(audio.loop){
-        audio.loop = false;
-        document.querySelector(".loop").classList.remove("active");
-    }else{
-        audio.loop = true;
-        document.querySelector(".loop").classList.add("active");
+    function displayLyrics() {
+        lyricsContainer.innerHTML = lyrics.map((line, index) => 
+            `<div class="lyric-line" id="line-${index}">${line.text}</div>`
+        ).join('');
     }
-}
 
-function nextSong(){
-    document.querySelector(".playpause").classList.add("active");
-    playlist_index++;
-    if(playlist_index > playlist.length - 1){
-        playlist_index = 0;
+    function updateLyrics() {
+        const currentTime = audio.currentTime;
+        lyrics.forEach((line, index) => {
+            const lyricElement = document.getElementById(`line-${index}`);
+            
+            if (currentTime >= line.time && currentTime < (lyrics[index + 1] ? lyrics[index + 1].time : audio.duration)) {
+                lyricElement.classList.add('active');
+                lyricElement.classList.remove('finished');
+                lyricElement.style.display = ""; // Show element
+            } else if (currentTime > line.time) {
+                lyricElement.classList.remove('active');
+                lyricElement.classList.add('finished');
+                setTimeout(() => {
+                    lyricElement.style.display = "none"; // Hide element after delay
+                }, 240); // Delay for 2 seconds
+            } else {
+                lyricElement.classList.remove('active');
+                lyricElement.classList.remove('finished');
+                lyricElement.style.display = ""; // Ensure it's shown if it should be
+            }
+        });
     }
-    fetchMusicDetail();
-}
-function prevSong(){
-    document.querySelector(".playpause").classList.add("active");
-    playlist_index--;
-    if(playlist_index < 0){
-        playlist_index = playlist.length - 1;
-    }
-    fetchMusicDetail();
-}
 
-function playPause(){
-    if(audio.paused){
-        audio.play();
-        document.querySelector(".playpause").classList.add("active");
-    }else{
-        audio.pause();
-        document.querySelector(".playpause").classList.remove("active");
+    function formatTime(seconds) {
+        const minutes = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
     }
-}
 
-function switchTrack(){
-    if(playlist_index == (playlist.length - 1)){
-        playlist_index = 0;
-    }else{
-        playlist_index++;
-    }
-    fetchMusicDetail();
-}
+    audio.addEventListener('loadedmetadata', () => {
+        seekSlider.max = audio.duration;
+        durationTimeText.textContent = formatTime(audio.duration);
+    });
 
-function seek(event){
-    if(audio.duration == 0){
-        null
-    }else{
-        if(seeking){
-            seekslider.value = event.clientX - seekslider.offsetLeft;
-            seekto = audio.duration * (seekslider.value / 100);
-            audio.currentTime = seekto;
+    audio.addEventListener('timeupdate', () => {
+        seekSlider.value = audio.currentTime;
+        currentTimeText.textContent = formatTime(audio.currentTime);
+        updateLyrics();
+    });
+
+    playPauseBtn.addEventListener('click', () => {
+        if (isPlaying) {
+            audio.pause();
+            playPauseBtn.classList.remove('active');
+        } else {
+            audio.play();
+            playPauseBtn.classList.add('active');
         }
-    }
-}
+        isPlaying = !isPlaying;
+    });
 
-function seektimeupdate(){
-    if(audio.duration){
-        var nt = audio.currentTime * (100 / audio.duration);
-        seekslider.value = nt;
-        var curmins = Math.floor(audio.currentTime / 60); 
-        var cursecs = Math.floor(audio.currentTime - curmins * 60); 
-        var durmins = Math.floor(audio.duration / 60); 
-        var dursecs = Math.floor(audio.duration - durmins * 60); 
-        if(cursecs < 10){ cursecs = "0"+cursecs; }
-        if(dursecs < 10){ dursecs = "0"+dursecs; }
-        if(curmins < 10){ curmins = "0"+curmins; }
-        if(durmins < 10){ durmins = "0"+durmins; }
-        currenttimetext.innerHTML = curmins+":"+cursecs;
-        durationtimetext.innerHTML = durmins+":"+dursecs;
-    }else{
-        currenttimetext.innerHTML = "00"+":"+"00";
-        durationtimetext.innerHTML = "00"+":"+"00";
-    }
-}
+    seekSlider.addEventListener('input', () => {
+        audio.currentTime = seekSlider.value;
+    });
 
-let checkbox = document.querySelector('input[name=theme]');
-checkbox.addEventListener('change',function(){
-    if(this.checked){
-        document.documentElement.setAttribute('data-theme','dark');
-    }else{
-        document.documentElement.setAttribute('data-theme','light');
-    }
-})
+    displayLyrics();
+});

@@ -1,44 +1,37 @@
-*{
+* {
     margin: 0;
     padding: 0;
     font-family: 'Poppins', sans-serif;
     box-sizing: border-box;
     font-size: 14px;
 }
-/* #for white theme */
 
-/* currently it is light theme but later with help of js we will make toggle button which will tranform it to dark and light mode */
-html{
+html {
     --bg: #f5f6f7;
     --color-text: #9c9c9c;
     --banner: #333333;
-    --color-shadow: -4px -2px 4px 0px #ffffff,
-    4px 2px 6px 0 #dfe4ea;
-    --color-inset-shadow: inset -2px -2px 6px rgba(255,255,255,0.8),
-                        inset 2px 2px 6px rgba(0 ,0,0,0.1);
-    
+    --color-shadow: -4px -2px 4px 0px #ffffff, 4px 2px 6px 0 #dfe4ea;
+    --color-inset-shadow: inset -2px -2px 6px rgba(255,255,255,0.8), inset 2px 2px 6px rgba(0,0,0,0.1);
 }
-html[data-theme='dark']{
+
+html[data-theme='dark'] {
     --bg: #121212;
     --color-text: #e2e2e2;
     --banner: #fefefe;
-    --color-shadow: -3px -3px 10px rgba(255,255,255,0.05),
-    3px 3px 15px rgba(0,0,0,0.5);
-    --color-inset-shadow: inset -2px -2px 6px rgba(255,255,255,0.01),
-                        inset 2px 2px 6px rgba(0 ,0,0,0.8);
-    
+    --color-shadow: -3px -3px 10px rgba(255,255,255,0.05), 3px 3px 15px rgba(0,0,0,0.5);
+    --color-inset-shadow: inset -2px -2px 6px rgba(255,255,255,0.01), inset 2px 2px 6px rgba(0,0,0,0.8);
 }
 
-body{
+body {
     background: var(--bg);
     color: var(--color-text);
 }
 
-a{
+a {
     text-decoration: none;
 }
 
-.player{
+.player {
     width: 80%;
     min-height: 550px;
     max-width: 300px;
@@ -50,7 +43,7 @@ a{
     position: relative;
 }
 
-.header{
+.header {
     height: 40px;
     display: grid;
     grid-template-columns: 1fr 3fr 1fr;
@@ -58,7 +51,7 @@ a{
     justify-items: center;
 }
 
-.header > .button{
+.header > .button {
     width: 2rem;
     height: 2rem;
     display: grid;
@@ -69,7 +62,7 @@ a{
     border-radius: 5px;
 }
 
-.image{
+.image {
     display: block;
     width: 175px;
     height: 175px;
@@ -80,29 +73,27 @@ a{
     box-shadow: var(--color-shadow);
 }
 
-.information{
+.information {
     margin: 1.5rem 0;
     text-align: center;
-
 }
 
-.information h1{
+.information h1 {
     color: var(--black);
     font-weight: 500;
     margin-bottom: 0.5rem;
 }
 
-.information p{
+.information p {
     font-size: 1.15rem;
     color: var(--color-text);
-
 }
 
-.progress{
+.progress {
     padding: 10px 0;
 }
 
-.progress-time{
+.progress-time {
     padding: 3px 5px;
     color: var(--color-text);
     font-weight: bold;
@@ -110,11 +101,11 @@ a{
     justify-content: space-between;
 }
 
-.progress-time > p{
+.progress-time > p {
     font-size: 0.65rem;
 }
 
-.buttons{
+.buttons {
     margin: 2rem 0;
     list-style: none;
     display: flex;
@@ -123,7 +114,7 @@ a{
     cursor: pointer;
 }
 
-.button{
+.button {
     color: var(--color-text);
     border-radius: 50%;
     margin: 0 5px;
@@ -133,59 +124,62 @@ a{
     box-shadow: var(--color-shadow);
 }
 
-.button-sm{
+.button-sm {
     width: 2rem;
     height: 2rem;
     opacity: 0.75;
 }
-.button-md{
+
+.button-md {
     width: 2.5rem;
     height: 2.5rem;
     opacity: 0.85;
 }
-.button-lg{
+
+.button-lg {
     width: 3.25rem;
-    height: 3.25rem;
-    /* opacity: 1; */
 }
 
-.bar{
+.bar {
     width: 50%;
     height: 2px;
     margin: auto;
     background: var(--color-text);
     border-radius: 25px;
     position: absolute;
-    transform: translate(-50% , -50%) ;
+    transform: translate(-50%, -50%);
     left: 50%;
     bottom: 1rem;
 }
 
-.playpause.active{
+.playpause.active {
     box-shadow: var(--color-inset-shadow);
 }
 
 .loop.active,
 .shuffle:active,
 .prev:active,
-.next:active{
+.next:active {
     box-shadow: var(--color-inset-shadow);
 }
 
-.fa-play{
-    display: block;
-}
-.fa-pause{
-    display: none;
-}
-.playpause.active .fa-play{
-    display: none;
-}
-.playpause.active .fa-pause{
+.fa-play {
     display: block;
 }
 
-.seekslider{
+.fa-pause {
+    display: none;
+}
+
+.playpause.active .fa-play {
+    display: none;
+}
+
+.playpause.active .fa-pause {
+    display: block;
+}
+
+.seekslider {
     width: 100px;
     height: 3px !important;
     -webkit-appearance: none;
@@ -198,8 +192,7 @@ a{
     margin-top: 10px;
 }
 
-
-.seekslider::-webkit-slider-thumb{
+.seekslider::-webkit-slider-thumb {
     -webkit-appearance: none;
     width: 10px;
     height: 10px;
@@ -209,13 +202,60 @@ a{
     outline: none;
     transform: scale(1);
 }
-.seekslider:active::-webkit-slider-thumb{
+
+.seekslider:active::-webkit-slider-thumb {
     transform: scale(1.2);
 }
-label{
+
+label {
     cursor: pointer;
 }
 
-input[type="checkbox"]{
+input[type="checkbox"] {
     -webkit-appearance: none;
+}
+
+.lyrics-container {
+    margin-top: 20px;
+    width: 100%;
+    text-align: center;
+    background: #4546514D;
+    backdrop-filter: blur(8px);
+    opacity: 0.7;
+    overflow: hidden;
+    height: 100px;
+    padding-top: 20px;
+    border-radius: 30px;
+}
+
+.lyrics {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    transition: transform 0.5s;
+}
+.lyrics-container p {
+  margin-top: 10px;
+  z-index: 9999999;
+}
+.lyric-line {
+    font-size: 16px;
+    opacity: 0.7;
+    transition: font-size 0.3s, color 0.3s, opacity 0.3s;
+}
+
+.lyric-line.active {
+    font-size: 25px;
+    color: white;
+    
+    color: white;
+    font-weight: 600;
+    opacity: 1;
+    transform: translateY(-10px);
+}
+
+.lyric-line.finished {
+    opacity: 0;
+    transition: 0.8s;
+    transform: translateY(-10px);
 }
